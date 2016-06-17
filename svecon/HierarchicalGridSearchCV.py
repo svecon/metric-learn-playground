@@ -31,7 +31,7 @@ class HierarchicalGridSearchCV(object):
         newParamDict = {**old_parameters, **parameters}
 
         if error is not None:
-            return None,None,None,None,None,newParamDict,times+(0,),"Cascading:{}".format(error)
+            return None,None,None,None,y_test,newParamDict,times+(0,),"Cascading:{}".format(error)
 
         estimator.set_params(**parameters)
         t0 = time()
@@ -46,7 +46,7 @@ class HierarchicalGridSearchCV(object):
             logging.info("\nError in HirearchicalGridSearch pipeline")
             logging.info( json.dumps(newParamDict, sort_keys=True, indent=4))
             logging.exception("Exception in step: {}".format(",".join([name for name,e in estimator.steps])))
-            return None,None,None,None,None,newParamDict,times+(time()-t0,),str(e)
+            return None,None,None,None,y_test,newParamDict,times+(time()-t0,),str(e)
             
     def fit(self, X, y):
         n_folds = self.cv.n_folds
@@ -72,17 +72,21 @@ class HierarchicalGridSearchCV(object):
                     for est,X_train,y_train,X_test,y_test,old_parameters,times,err in self.steps[step]
             )
           
-        self.scores = [ (est.score(X_test, y_test),len(y_test),parameters,times,err) if est is not None else (0,1,parameters,times,err)
+        self.scores = [ (est.score(X_test, y_test),len(y_test),parameters,times,err) if est is not None else (0,len(y_test),parameters,times,err)
                        for est,X_train,y_train,X_test,y_test,parameters,times,err in self.steps[-1] ]
         n_fits = len(self.scores)
         
         # FROM https://github.com/scikit-learn/scikit-learn/blob/51a765a/sklearn/grid_search.py#L560
         self.grid_scores_ = list()
+        non_empty_error = None
+        times_sum = None
         for grid_start in range(0, n_fits, n_folds):
             n_test_samples = 0
             score = 0
             all_scores = []
             for this_score, this_n_test_samples, parameters, times, err in self.scores[grid_start:grid_start + n_folds]:
+                times_sum = times if times_sum is None else [t1+t2 for t1,t2 in zip(times_sum, times)]
+                non_empty_error = err if err is not None else non_empty_error
                 all_scores.append(this_score)
                 if self.iid:
                     this_score *= this_n_test_samples
@@ -95,7 +99,7 @@ class HierarchicalGridSearchCV(object):
 
             # make output statistics
             times_dict = {}
-            for i,t in enumerate(times):
+            for i,t in enumerate([float(x)/n_folds for x in times_sum]):
                 times_dict['time'+repr(i+1)] = t
 
             scores_dict = {}
@@ -103,12 +107,12 @@ class HierarchicalGridSearchCV(object):
                 scores_dict['score'+repr(i+1)] = t
 
             self.grid_scores_.append({
-                'mean': score,
+                'mean': score if non_empty_error is None else 0,
                 'std': np.std(all_scores),
                 'params': parameters,
                 'scores': scores_dict,
                 'times': times_dict,
-                'error': err,
+                'error': non_empty_error,
             })
 
         return self
