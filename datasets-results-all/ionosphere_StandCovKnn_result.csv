@@ -1,0 +1,9 @@
+,error,knn__n_neighbors,mean,score1,score10,score2,score3,score4,score5,score6,score7,score8,score9,std,time1,time2,time3,technique,dataset
+0,Cascading:Matrix is not positive definite,1,0.0,0,0,0,0,0,0,0,0,0,0,0.0,0.00121307373046875,0.0010886192321777344,0,stand+Cov+kNN,ionosphere
+1,Cascading:Matrix is not positive definite,2,0.0,0,0,0,0,0,0,0,0,0,0,0.0,0.00121307373046875,0.0010886192321777344,0,stand+Cov+kNN,ionosphere
+2,Cascading:Matrix is not positive definite,4,0.0,0,0,0,0,0,0,0,0,0,0,0.0,0.00121307373046875,0.0010886192321777344,0,stand+Cov+kNN,ionosphere
+3,Cascading:Matrix is not positive definite,8,0.0,0,0,0,0,0,0,0,0,0,0,0.0,0.00121307373046875,0.0010886192321777344,0,stand+Cov+kNN,ionosphere
+4,Cascading:Matrix is not positive definite,16,0.0,0,0,0,0,0,0,0,0,0,0,0.0,0.00121307373046875,0.0010886192321777344,0,stand+Cov+kNN,ionosphere
+5,Cascading:Matrix is not positive definite,32,0.0,0,0,0,0,0,0,0,0,0,0,0.0,0.00121307373046875,0.0010886192321777344,0,stand+Cov+kNN,ionosphere
+6,Cascading:Matrix is not positive definite,64,0.0,0,0,0,0,0,0,0,0,0,0,0.0,0.00121307373046875,0.0010886192321777344,0,stand+Cov+kNN,ionosphere
+7,Cascading:Matrix is not positive definite,128,0.0,0,0,0,0,0,0,0,0,0,0,0.0,0.00121307373046875,0.0010886192321777344,0,stand+Cov+kNN,ionosphere
