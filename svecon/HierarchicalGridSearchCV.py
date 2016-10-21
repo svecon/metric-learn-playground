@@ -31,7 +31,7 @@ class HierarchicalGridSearchCV(object):
         newParamDict = {**old_parameters, **parameters}
 
         if error is not None:
-            return None,None,None,None,y_test,newParamDict,times+(0,),"Cascading:{}".format(error)
+            return None,None,y_train,None,y_test,newParamDict,times+(0,),"Cascading:{}".format(error)
 
         estimator.set_params(**parameters)
         t0 = time()
@@ -41,12 +41,12 @@ class HierarchicalGridSearchCV(object):
                 return estimator,X_train_tr,y_train,estimator.transform(X_test),y_test,newParamDict,times+(time()-t0,),error
             else:
                 estimator.fit(X_train, y_train)
-                return estimator,None,None,X_test,y_test,newParamDict,times+(time()-t0,),error
+                return estimator,X_train,y_train,X_test,y_test,newParamDict,times+(time()-t0,),error
         except Exception as e:
             logging.info("\nError in HirearchicalGridSearch pipeline")
             logging.info( json.dumps(newParamDict, sort_keys=True, indent=4))
             logging.exception("Exception in step: {}".format(",".join([name for name,e in estimator.steps])))
-            return None,None,None,None,y_test,newParamDict,times+(time()-t0,),str(e)
+            return None,None,y_train,None,y_test,newParamDict,times+(time()-t0,),str(e)
             
     def fit(self, X, y):
         n_folds = self.cv.n_folds
@@ -74,6 +74,8 @@ class HierarchicalGridSearchCV(object):
           
         self.scores = [ (est.score(X_test, y_test),len(y_test),parameters,times,err) if est is not None else (0,len(y_test),parameters,times,err)
                        for est,X_train,y_train,X_test,y_test,parameters,times,err in self.steps[-1] ]
+        self.train_scores = [ (est.score(X_train, y_train),len(y_train),parameters,times,err) if est is not None else (0,len(y_train),parameters,times,err)
+                       for est,X_train,y_train,X_test,y_test,parameters,times,err in self.steps[-1] ]
         n_fits = len(self.scores)
         
         # FROM https://github.com/scikit-learn/scikit-learn/blob/51a765a/sklearn/grid_search.py#L560
@@ -82,20 +84,44 @@ class HierarchicalGridSearchCV(object):
         times_sum = None
         for grid_start in range(0, n_fits, n_folds):
             n_test_samples = 0
+            n_train_samples = 0
             score = 0
+            train_score = 0
             all_scores = []
+            all_train_scores = []
+            successful_folds = n_folds
             for this_score, this_n_test_samples, parameters, times, err in self.scores[grid_start:grid_start + n_folds]:
                 times_sum = times if times_sum is None else [t1+t2 for t1,t2 in zip(times_sum, times)]
                 non_empty_error = err if err is not None else non_empty_error
                 all_scores.append(this_score)
+                if this_score==0:
+                    successful_folds = successful_folds-1
+                    continue
                 if self.iid:
                     this_score *= this_n_test_samples
                     n_test_samples += this_n_test_samples
                 score += this_score
+
+            for this_score, this_n_train_samples, parameters, times, err in self.train_scores[grid_start:grid_start + n_folds]:
+                all_train_scores.append(this_score)
+                if this_score==0:
+                    successful_folds = successful_folds-1
+                    continue
+                if self.iid:
+                    this_score *= this_n_train_samples
+                    n_train_samples += this_n_train_samples
+                train_score += this_score
+            
+            score = 0.0
+            train_score = 0.0
             if self.iid:
-                score /= float(n_test_samples)
+                if n_test_samples > 0:
+                    score /= float(n_test_samples)
+                    train_score /= float(n_train_samples)
             else:
-                score /= float(n_folds)
+                if successful_folds > 0:
+                    score /= float(successful_folds)
+                    train_score /= float(successful_folds)
 
             # make output statistics
             times_dict = {}
@@ -106,11 +132,18 @@ class HierarchicalGridSearchCV(object):
             for i,t in enumerate(all_scores):
                 scores_dict['score'+repr(i+1)] = t
 
+            train_scores_dict = {}
+            for i,t in enumerate(all_train_scores):
+                train_scores_dict['train_score'+repr(i+1)] = t
+
             self.grid_scores_.append({
-                'mean': score if non_empty_error is None else 0,
+                'mean': score, # if non_empty_error is None else 0,
+                'train_mean': train_score, # if non_empty_error is None else 0,
                 'std': np.std(all_scores),
+                'train_std': np.std(all_train_scores),
                 'params': parameters,
                 'scores': scores_dict,
+                'train_scores': train_scores_dict,
                 'times': times_dict,
                 'error': non_empty_error,
             })
