@@ -112,8 +112,6 @@ class HierarchicalGridSearchCV(object):
                     n_train_samples += this_n_train_samples
                 train_score += this_score
             
-            score = 0.0
-            train_score = 0.0
             if self.iid:
                 if n_test_samples > 0:
                     score /= float(n_test_samples)
