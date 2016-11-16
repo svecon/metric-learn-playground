@@ -1,9 +1,9 @@
-,error,knn__n_neighbors,mean,score1,score10,score2,score3,score4,score5,score6,score7,score8,score9,std,time1,time2,time3,technique,dataset
-0,Cascading:Matrix is not positive definite,1,0,0,0,0,0,0,0,0,0,0,0,0.0,0.003647732734680176,0.014496898651123047,0.0,stand+Cov+kNN,ionosphere
-1,Cascading:Matrix is not positive definite,2,0,0,0,0,0,0,0,0,0,0,0,0.0,0.007295465469360352,0.028993797302246094,0.0,stand+Cov+kNN,ionosphere
-2,Cascading:Matrix is not positive definite,4,0,0,0,0,0,0,0,0,0,0,0,0.0,0.010943198204040527,0.04349069595336914,0.0,stand+Cov+kNN,ionosphere
-3,Cascading:Matrix is not positive definite,8,0,0,0,0,0,0,0,0,0,0,0,0.0,0.014590930938720704,0.05798759460449219,0.0,stand+Cov+kNN,ionosphere
-4,Cascading:Matrix is not positive definite,16,0,0,0,0,0,0,0,0,0,0,0,0.0,0.01823866367340088,0.07248449325561523,0.0,stand+Cov+kNN,ionosphere
-5,Cascading:Matrix is not positive definite,32,0,0,0,0,0,0,0,0,0,0,0,0.0,0.021886396408081054,0.08698139190673829,0.0,stand+Cov+kNN,ionosphere
-6,Cascading:Matrix is not positive definite,64,0,0,0,0,0,0,0,0,0,0,0,0.0,0.02553412914276123,0.10147829055786133,0.0,stand+Cov+kNN,ionosphere
-7,Cascading:Matrix is not positive definite,128,0,0,0,0,0,0,0,0,0,0,0,0.0,0.029181861877441408,0.11597518920898438,0.0,stand+Cov+kNN,ionosphere
+,error,knn__n_neighbors,mean,score1,score10,score2,score3,score4,score5,score6,score7,score8,score9,std,time1,time2,time3,train_mean,train_score1,train_score10,train_score2,train_score3,train_score4,train_score5,train_score6,train_score7,train_score8,train_score9,train_std,technique,dataset
+0,Cascading:Matrix is not positive definite,1,0,0,0,0,0,0,0,0,0,0,0,0.0,0.005161428451538086,0.030608105659484863,0.0,0,0,0,0,0,0,0,0,0,0,0,0.0,stand+Cov+kNN,ionosphere
+1,Cascading:Matrix is not positive definite,2,0,0,0,0,0,0,0,0,0,0,0,0.0,0.010322856903076171,0.061216211318969725,0.0,0,0,0,0,0,0,0,0,0,0,0,0.0,stand+Cov+kNN,ionosphere
+2,Cascading:Matrix is not positive definite,4,0,0,0,0,0,0,0,0,0,0,0,0.0,0.015484285354614259,0.09182431697845458,0.0,0,0,0,0,0,0,0,0,0,0,0,0.0,stand+Cov+kNN,ionosphere
+3,Cascading:Matrix is not positive definite,8,0,0,0,0,0,0,0,0,0,0,0,0.0,0.020645713806152342,0.12243242263793945,0.0,0,0,0,0,0,0,0,0,0,0,0,0.0,stand+Cov+kNN,ionosphere
+4,Cascading:Matrix is not positive definite,16,0,0,0,0,0,0,0,0,0,0,0,0.0,0.02580714225769043,0.15304052829742432,0.0,0,0,0,0,0,0,0,0,0,0,0,0.0,stand+Cov+kNN,ionosphere
+5,Cascading:Matrix is not positive definite,32,0,0,0,0,0,0,0,0,0,0,0,0.0,0.030968570709228517,0.18364863395690917,0.0,0,0,0,0,0,0,0,0,0,0,0,0.0,stand+Cov+kNN,ionosphere
+6,Cascading:Matrix is not positive definite,64,0,0,0,0,0,0,0,0,0,0,0,0.0,0.036129999160766604,0.21425673961639405,0.0,0,0,0,0,0,0,0,0,0,0,0,0.0,stand+Cov+kNN,ionosphere
+7,Cascading:Matrix is not positive definite,128,0,0,0,0,0,0,0,0,0,0,0,0.0,0.041291427612304685,0.2448648452758789,0.0,0,0,0,0,0,0,0,0,0,0,0,0.0,stand+Cov+kNN,ionosphere
