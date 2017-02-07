@@ -1,0 +1,9 @@
+,error,knn__n_neighbors,mean,score1,score10,score2,score3,score4,score5,score6,score7,score8,score9,std,time1,time2,time3,train_mean,train_score1,train_score10,train_score2,train_score3,train_score4,train_score5,train_score6,train_score7,train_score8,train_score9,train_std,technique,dataset
+0,Cascading:Matrix is not positive definite,1,0,0,0,0,0,0,0,0,0,0,0,0.0,0.007269811630249023,0.018985962867736815,0.0,0,0,0,0,0,0,0,0,0,0,0,0.0,stand+Cov+kNN,digits6
+1,Cascading:Matrix is not positive definite,2,0,0,0,0,0,0,0,0,0,0,0,0.0,0.014539623260498047,0.03797192573547363,0.0,0,0,0,0,0,0,0,0,0,0,0,0.0,stand+Cov+kNN,digits6
+2,Cascading:Matrix is not positive definite,4,0,0,0,0,0,0,0,0,0,0,0,0.0,0.02180943489074707,0.05695788860321045,0.0,0,0,0,0,0,0,0,0,0,0,0,0.0,stand+Cov+kNN,digits6
+3,Cascading:Matrix is not positive definite,8,0,0,0,0,0,0,0,0,0,0,0,0.0,0.029079246520996093,0.07594385147094726,0.0,0,0,0,0,0,0,0,0,0,0,0,0.0,stand+Cov+kNN,digits6
+4,Cascading:Matrix is not positive definite,16,0,0,0,0,0,0,0,0,0,0,0,0.0,0.03634905815124512,0.09492981433868408,0.0,0,0,0,0,0,0,0,0,0,0,0,0.0,stand+Cov+kNN,digits6
+5,Cascading:Matrix is not positive definite,32,0,0,0,0,0,0,0,0,0,0,0,0.0,0.04361886978149414,0.1139157772064209,0.0,0,0,0,0,0,0,0,0,0,0,0,0.0,stand+Cov+kNN,digits6
+6,Cascading:Matrix is not positive definite,64,0,0,0,0,0,0,0,0,0,0,0,0.0,0.050888681411743165,0.13290174007415773,0.0,0,0,0,0,0,0,0,0,0,0,0,0.0,stand+Cov+kNN,digits6
+7,Cascading:Matrix is not positive definite,128,0,0,0,0,0,0,0,0,0,0,0,0.0,0.058158493041992186,0.15188770294189452,0.0,0,0,0,0,0,0,0,0,0,0,0,0.0,stand+Cov+kNN,digits6

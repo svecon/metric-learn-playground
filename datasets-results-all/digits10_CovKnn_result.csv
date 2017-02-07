@@ -1,0 +1,9 @@
+,error,knn__n_neighbors,mean,score1,score10,score2,score3,score4,score5,score6,score7,score8,score9,std,time1,time2,time3,train_mean,train_score1,train_score10,train_score2,train_score3,train_score4,train_score5,train_score6,train_score7,train_score8,train_score9,train_std,technique,dataset
+0,Cascading:Matrix is not positive definite,1,0,0,0,0,0,0,0,0,0,0,0,0.0,0.006987738609313965,0.07681255340576172,0.0,0,0,0,0,0,0,0,0,0,0,0,0.0,Cov+kNN,digits10
+1,Cascading:Matrix is not positive definite,2,0,0,0,0,0,0,0,0,0,0,0,0.0,0.01397547721862793,0.15362510681152344,0.0,0,0,0,0,0,0,0,0,0,0,0,0.0,Cov+kNN,digits10
+2,Cascading:Matrix is not positive definite,4,0,0,0,0,0,0,0,0,0,0,0,0.0,0.020963215827941896,0.23043766021728515,0.0,0,0,0,0,0,0,0,0,0,0,0,0.0,Cov+kNN,digits10
+3,Cascading:Matrix is not positive definite,8,0,0,0,0,0,0,0,0,0,0,0,0.0,0.02795095443725586,0.3072502136230469,0.0,0,0,0,0,0,0,0,0,0,0,0,0.0,Cov+kNN,digits10
+4,Cascading:Matrix is not positive definite,16,0,0,0,0,0,0,0,0,0,0,0,0.0,0.034938693046569824,0.3840627670288086,0.0,0,0,0,0,0,0,0,0,0,0,0,0.0,Cov+kNN,digits10
+5,Cascading:Matrix is not positive definite,32,0,0,0,0,0,0,0,0,0,0,0,0.0,0.04192643165588379,0.4608753204345703,0.0,0,0,0,0,0,0,0,0,0,0,0,0.0,Cov+kNN,digits10
+6,Cascading:Matrix is not positive definite,64,0,0,0,0,0,0,0,0,0,0,0,0.0,0.04891417026519775,0.537687873840332,0.0,0,0,0,0,0,0,0,0,0,0,0,0.0,Cov+kNN,digits10
+7,Cascading:Matrix is not positive definite,128,0,0,0,0,0,0,0,0,0,0,0,0.0,0.05590190887451172,0.6145004272460938,0.0,0,0,0,0,0,0,0,0,0,0,0,0.0,Cov+kNN,digits10
