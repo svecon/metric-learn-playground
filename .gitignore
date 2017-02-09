@@ -1,4 +1,5 @@
 # User-defined
+img/
 datasets/digits6.csv
 datasets/digits10.csv
 datasets/mnist.csv

@@ -1,9 +1,9 @@
 import numpy as np
+import math
 # import pandas as pd
 # import glob
 # import os.path
 # import sys
-# import math
 
 # from svecon.HierarchicalGridSearchCV import HierarchicalGridSearchCV
 # from svecon.EmptyTransformer import EmptyTransformer
@@ -75,7 +75,7 @@ params = {
    }
 matplotlib.rcParams.update(params)
 
-def commonStyles(fig, ax):
+def commonStyles(ax):
     ax.spines['top'].set_visible(False)
     ax.spines['right'].set_visible(False)
     ax.spines['left'].set_visible(False)
@@ -87,9 +87,24 @@ def commonStyles(fig, ax):
     ax.grid(axis='y', color="0.9", linestyle='-', linewidth=1)
     ax.set_axisbelow(True)
 
-    fig.subplots_adjust(left=0.2)
-#     fig.subplots_adjust(bottom=0.15)
-    plt.tight_layout()
+    plt.tight_layout(pad=0.0, w_pad=1.0, h_pad=3.0)
+
+def startGraphing(title=None, cols=1, N=1):
+    fig = plb.figure()
+    if title:
+        st = fig.suptitle(title, fontsize=12)
+    
+    rows = math.ceil(N/cols)
+    fig.set_size_inches(min(5.70866, 4*rows), min(9.72441, 3*cols), forward=False)
+    
+    return fig, [fig.add_subplot(rows,cols,i+1) for i in range(N)]
+
+def endGraphing(fig, filename=None, has_title=True):
+    if has_title:
+        fig.subplots_adjust(top=0.88)
+
+    if filename is not None:
+        fig.savefig(filename+'.pdf')
 
 def plotBox(title, data, labels, means=None, xlabel=None, ylabel='successrate (%)', doubleColors=False, skipped=None, rotateLabels=90):
     if skipped is None:
@@ -138,7 +153,7 @@ def plotBox(title, data, labels, means=None, xlabel=None, ylabel='successrate (%
         for c in bp['caps']:
             c.set_linewidth(2)
 
-    commonStyles(fig, ax)
+    commonStyles(ax)
     ax.set_xticklabels(labels, rotation=rotateLabels)
             
     if ylabel[:11]=='successrate':
@@ -172,7 +187,7 @@ def plotLines(title, data, labels, x_ticks, xlabel=None, ylabel='successrate (%)
     box = ax.get_position()
     ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
 
-    commonStyles(fig, ax)
+    commonStyles(ax)
     
     if ylabel[:11]=='successrate':
         plt.ylim(ymax=1.0)
@@ -215,10 +230,41 @@ def plotFitness(title, data, bestresults, worstresults, xlabel=None, ylabel='suc
     box = ax.get_position()
     ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
 
-    commonStyles(fig, ax)
+    commonStyles(ax)
     
     if ylabel[:11]=='successrate':
         plt.ylim(ymax=1.0)
 
     plt.tight_layout()
+    # fig.savefig('variance_matplotlib.png')
+
+def plotScatter(ax, title, X_train, y_train, X_test, y_test, wrong, score, xlabel=None, ylabel=None):
+    colors = generateColors(alpha=255, doubleColors=False, skipped=None)
+
+    X_train = X_train.T
+    X_test = X_test.T
+
+    ax.set_title('{} ({:.2f}%)'.format(title, score*100), y=1.05)
+    
+    def fsizes(a):
+        return [x*50+75 for x in a]
+    
+    def fcolors(a):
+        return [colors[x] for x in a]
+    
+    def fedge(a):
+        return [(1,0,0,1) if x else (0,0,0,0) for x in a]
+    
+    ax.scatter(X_train[0], X_train[1], s=fsizes(np.zeros(len(y_train))), color=fcolors(y_train), alpha=0.33)
+    ax.scatter(X_test[0], X_test[1], s=fsizes(wrong), color=fcolors(y_train), alpha=0.55, edgecolors=fedge(wrong))
+
+    ax.set_xticklabels([])
+    ax.set_yticklabels([])
+
+    commonStyles(ax)
+
+    ax.spines['bottom'].set_visible(False)
+    ax.grid(axis='x', color="0.9", linestyle='-', linewidth=0)
+    ax.grid(axis='y', color="0.9", linestyle='-', linewidth=0)
+    ax.tick_params(axis='x', length=0)
     # fig.savefig('variance_matplotlib.png')
