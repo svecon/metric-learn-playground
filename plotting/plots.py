@@ -89,7 +89,7 @@ def commonStyles(ax):
 
     plt.tight_layout(pad=0.0, w_pad=1.0, h_pad=3.0)
 
-def startGraphing(title=None, cols=1, N=1, size=None):
+def startGraphing(title=None, cols=1, N=1, size=None, sharey=False):
     fig = plb.figure()
     if title:
         st = fig.suptitle(title, fontsize=12)
@@ -103,7 +103,8 @@ def startGraphing(title=None, cols=1, N=1, size=None):
     
     axes = []
     for i in range(N):
-        axes.append(fig.add_subplot(rows,cols,i+1,sharey=axes[0] if len(axes)>0 else None))
+        sharey_val = axes[0] if sharey and len(axes)>0 else None
+        axes.append(fig.add_subplot(rows,cols,i+1,sharey=sharey_val))
 
     return fig, axes
 
