@@ -89,22 +89,45 @@ def commonStyles(ax):
 
     plt.tight_layout(pad=0.0, w_pad=1.0, h_pad=3.0)
 
-def startGraphing(title=None, cols=1, N=1):
+def startGraphing(title=None, cols=1, N=1, size=None):
     fig = plb.figure()
     if title:
         st = fig.suptitle(title, fontsize=12)
     
     rows = math.ceil(N/cols)
-    fig.set_size_inches(min(5.70866, 4*rows), min(9.72441, 3*cols), forward=False)
-    
-    return fig, [fig.add_subplot(rows,cols,i+1) for i in range(N)]
 
-def endGraphing(fig, filename=None, has_title=True):
-    if has_title:
-        fig.subplots_adjust(top=0.88)
+    if size is None:
+        fig.set_size_inches(min(5.70866, 4*rows), min(9.72441, 3*cols), forward=False)
+    else:
+        fig.set_size_inches(*size, forward=False)
+    
+    axes = []
+    for i in range(N):
+        axes.append(fig.add_subplot(rows,cols,i+1,sharey=axes[0] if len(axes)>0 else None))
+
+    return fig, axes
+
+def endGraphing(fig, legend=None, filename=None, move_title=0.825, legend_ncol=3):
+    if move_title:
+        fig.subplots_adjust(top=move_title)
+
+    # Shrink current axis by 20%
+    # box = ax.get_position()
+    # ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
+
+    # fig.subplots_adjust(right=0.80)
+
+    if legend:
+        # Right of the plot: loc='center left', bbox_to_anchor=(1, 0.5));
+        legend = fig.legend(plt.gca().lines, legend, ncol=legend_ncol, bbox_to_anchor=(.0, 0.0, 1., 0.), loc='lower left', mode="expand", borderaxespad=0.)
+        fig.subplots_adjust(bottom=0.175)
+        
+        frame = legend.get_frame()        
+        frame.set_facecolor('1.0')
+        frame.set_edgecolor('1.0')
 
     if filename is not None:
-        fig.savefig(filename+'.pdf')
+        fig.savefig(filename+'.pdf')    
 
 def plotBox(title, data, labels, means=None, xlabel=None, ylabel='successrate (%)', doubleColors=False, skipped=None, rotateLabels=90):
     if skipped is None:
@@ -161,7 +184,6 @@ def plotBox(title, data, labels, means=None, xlabel=None, ylabel='successrate (%
 
     fig.set_size_inches(min(10, 0.66*len(labels)), 4, forward=True)
     
-#     plb.savefig('boxplot4.pdf')
 
 def plotLines(title, data, labels, x_ticks, xlabel=None, ylabel='successrate (%)', doubleColors=False):
     fig = plb.figure()
@@ -192,51 +214,38 @@ def plotLines(title, data, labels, x_ticks, xlabel=None, ylabel='successrate (%)
     if ylabel[:11]=='successrate':
         plt.ylim(ymax=1.0)
 
-    plt.tight_layout()
-#     plb.savefig('boxplot4.pdf')
 
-def plotFitness(title, data, bestresults, worstresults, xlabel=None, ylabel='successrate (%)'):
+def plotFitness(ax, fitnesses, best_results, worst_results, mean_results, title=None, xlabel=None, ylabel='successrate (%)', **kwargs):
     bmap = brewer2mpl.get_map('Set2', 'qualitative', 7)
     colors = bmap.mpl_colors
      
-    x = np.arange(1, data.shape[0]+1)
+    x = np.arange(1, fitnesses.shape[0]+1)
 
-    med, perc_25, perc_75 = perc(data)
-    maxs = np.max(data, axis=1)
-    mins = np.min(data, axis=1)
+    med, perc_25, perc_75 = perc(fitnesses)
+    maxs = np.max(fitnesses, axis=1)
+    mins = np.min(fitnesses, axis=1)
 
-    fig = plb.figure() # no frame
-    ax = fig.add_subplot(111)
-    ax.set_title(title, y=1.05)
+    if title:
+        ax.set_title(title, y=1.05)
     
-    if ylabel: plb.ylabel(ylabel, size=10)
-    if xlabel: plb.xlabel(xlabel, size=10)
+    if ylabel: ax.set_ylabel(ylabel, size=10)
+    if xlabel: ax.set_xlabel(xlabel, size=10)
 
     ax.plot(x, gaussian_filter1d(maxs, sigma=2.0, axis=0), linewidth=1, color=colors[1])
     ax.fill_between(x, perc_25, perc_75, alpha=0.25, linewidth=0, color=colors[0]) 
     ax.plot(x, gaussian_filter1d(med, sigma=2.0, axis=0), linewidth=1, color=colors[0])
 
-    ax.plot(x, gaussian_filter1d(bestresults, sigma=2.0, axis=0), linewidth=2, color=colors[2])
-    ax.plot(x, gaussian_filter1d(worstresults, sigma=2.0, axis=0), linewidth=2, color=colors[3])
+    ax.plot(x, gaussian_filter1d(best_results, sigma=2.0, axis=0), linewidth=2, color=colors[2])
+    ax.plot(x, gaussian_filter1d(worst_results, sigma=2.0, axis=0), linewidth=2, color=colors[3])
+    ax.plot(x, gaussian_filter1d(mean_results, sigma=2.0, axis=0), linewidth=2, color=colors[4])
 
     ax.plot(x, gaussian_filter1d(mins, sigma=2.0, axis=0), linewidth=1, color=colors[1])
-
-    legend = ax.legend(["Maximal fitness", "Median fitness", "Successrate using best", "Successrate using worst","Minimal fitness"], loc='center left', bbox_to_anchor=(1, 0.5));
-    frame = legend.get_frame()
-    frame.set_facecolor('1.0')
-    frame.set_edgecolor('1.0')
-
-    # Shrink current axis by 20%
-    box = ax.get_position()
-    ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
 
     commonStyles(ax)
     
     if ylabel[:11]=='successrate':
         plt.ylim(ymax=1.0)
 
-    plt.tight_layout()
-    # fig.savefig('variance_matplotlib.png')
 
 def plotScatter(ax, title, X_train, y_train, X_test, y_test, wrong, score, xlabel=None, ylabel=None):
     colors = generateColors(alpha=255, doubleColors=False, skipped=None)
@@ -267,4 +276,3 @@ def plotScatter(ax, title, X_train, y_train, X_test, y_test, wrong, score, xlabe
     ax.grid(axis='x', color="0.9", linestyle='-', linewidth=0)
     ax.grid(axis='y', color="0.9", linestyle='-', linewidth=0)
     ax.tick_params(axis='x', length=0)
-    # fig.savefig('variance_matplotlib.png')
