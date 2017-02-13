@@ -1,10 +1,6 @@
 # User-defined
 img/
-datasets/digits6.csv
-datasets/digits10.csv
-datasets/mnist.csv
-datasets/letters.csv
-datasets/ofaces.csv
+datasets/big/
 datasets-results-dim-reduction/
 datasets-results-dumps/
 
