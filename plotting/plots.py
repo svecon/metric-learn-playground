@@ -216,10 +216,16 @@ def plotLines(title, data, labels, x_ticks, xlabel=None, ylabel='successrate (%)
         plt.ylim(ymax=1.0)
 
 
-def plotFitness(ax, fitnesses, best_results, worst_results, mean_results, title=None, xlabel=None, ylabel='successrate (%)', **kwargs):
+def plotFitness(ax, fitnesses, best_results, worst_results, mean_results, max_gen=None, title=None, xlabel=None, ylabel='successrate (%)', **kwargs):
     bmap = brewer2mpl.get_map('Set2', 'qualitative', 7)
     colors = bmap.mpl_colors
      
+    if max_gen is not None:
+        fitnesses = fitnesses[:max_gen]
+        best_results = best_results[:max_gen]
+        worst_results = worst_results[:max_gen]
+        mean_results = mean_results[:max_gen]
+
     x = np.arange(1, fitnesses.shape[0]+1)
 
     med, perc_25, perc_75 = perc(fitnesses)
