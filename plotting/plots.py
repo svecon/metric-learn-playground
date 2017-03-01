@@ -216,17 +216,17 @@ def plotLines(title, data, labels, x_ticks, xlabel=None, ylabel='successrate (%)
         plt.ylim(ymax=1.0)
 
 
-def plotFitness(ax, fitnesses, best_results, worst_results, mean_results, max_gen=None, title=None, xlabel=None, ylabel='successrate (%)', **kwargs):
+def plotFitness(ax, fitnesses, best_results, worst_results, mean_results, baseline, min_gen=0, max_gen=None, title=None, xlabel=None, ylabel='successrate (%)', **kwargs):
     bmap = brewer2mpl.get_map('Set2', 'qualitative', 7)
     colors = bmap.mpl_colors
      
     if max_gen is not None:
-        fitnesses = fitnesses[:max_gen]
-        best_results = best_results[:max_gen]
-        worst_results = worst_results[:max_gen]
-        mean_results = mean_results[:max_gen]
+        fitnesses = fitnesses[min_gen:max_gen]
+        best_results = best_results[min_gen:max_gen]
+        worst_results = worst_results[min_gen:max_gen]
+        mean_results = mean_results[min_gen:max_gen]
 
-    x = np.arange(1, fitnesses.shape[0]+1)
+    x = np.arange(1+min_gen, fitnesses.shape[0]+1+min_gen)
 
     med, perc_25, perc_75 = perc(fitnesses)
     maxs = np.max(fitnesses, axis=1)
@@ -244,14 +244,16 @@ def plotFitness(ax, fitnesses, best_results, worst_results, mean_results, max_ge
 
     ax.plot(x, gaussian_filter1d(best_results, sigma=2.0, axis=0), linewidth=2, color=colors[2])
     ax.plot(x, gaussian_filter1d(worst_results, sigma=2.0, axis=0), linewidth=2, color=colors[3])
-    ax.plot(x, gaussian_filter1d(mean_results, sigma=2.0, axis=0), linewidth=2, color=colors[4])
+    # ax.plot(x, gaussian_filter1d(mean_results, sigma=2.0, axis=0), linewidth=2, color=colors[4])
 
     ax.plot(x, gaussian_filter1d(mins, sigma=2.0, axis=0), linewidth=1, color=colors[1])
+    ax.plot(x, [baseline]*len(x), linewidth=1, color='black')
 
     commonStyles(ax)
     
     if ylabel[:11]=='successrate':
-        plt.ylim(ymax=1.0)
+        # plt.ylim(ymax=1.0)
+        ax.set_ylim([0.0, 1.0])
 
 
 def plotScatter(ax, title, X_train, y_train, X_test, y_test, wrong, score, xlabel=None, ylabel=None):
@@ -271,8 +273,8 @@ def plotScatter(ax, title, X_train, y_train, X_test, y_test, wrong, score, xlabe
     def fedge(a):
         return [(1,0,0,1) if x else (0,0,0,0) for x in a]
     
-    ax.scatter(X_train[0], X_train[1], s=fsizes(np.zeros(len(y_train))), color=fcolors(y_train), alpha=0.33)
-    ax.scatter(X_test[0], X_test[1], s=fsizes(wrong), color=fcolors(y_train), alpha=0.55, edgecolors=fedge(wrong))
+    ax.scatter(X_train[0], X_train[1], s=fsizes(np.zeros(len(y_train))), color=fcolors(y_train), alpha=0.15)
+    ax.scatter(X_test[0], X_test[1], s=fsizes(wrong), color=fcolors(y_test), alpha=0.55, edgecolors=fedge(wrong))
 
     ax.set_xticklabels([])
     ax.set_yticklabels([])
