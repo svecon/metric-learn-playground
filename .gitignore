@@ -1,9 +1,7 @@
 # User-defined
 img/
 datasets/big/
-datasets-results-dim-reduction/
-datasets-results-dumps/
-
+results/fitness/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
