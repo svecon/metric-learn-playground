@@ -87,8 +87,6 @@ def commonStyles(ax):
     ax.grid(axis='y', color="0.9", linestyle='-', linewidth=1)
     ax.set_axisbelow(True)
 
-    plt.tight_layout(pad=0.0, w_pad=1.0, h_pad=3.0)
-
 def startGraphing(title=None, cols=1, N=1, size=None, sharey=False):
     fig = plb.figure()
     if title:
@@ -108,7 +106,7 @@ def startGraphing(title=None, cols=1, N=1, size=None, sharey=False):
 
     return fig, axes
 
-def endGraphing(fig, legend=None, filename=None, move_title=0.825, legend_ncol=3):
+def endGraphing(fig, legend=None, filename=None, move_title=0.825, legend_ncol=3, adjust_legend=0.175, legend_position='bottom'):
     if move_title:
         fig.subplots_adjust(top=move_title)
 
@@ -118,10 +116,16 @@ def endGraphing(fig, legend=None, filename=None, move_title=0.825, legend_ncol=3
 
     # fig.subplots_adjust(right=0.80)
 
-    if legend:
+    plt.tight_layout(pad=0.0, w_pad=1.0, h_pad=3.0)
+
+    if legend is not None:
         # Right of the plot: loc='center left', bbox_to_anchor=(1, 0.5));
-        legend = fig.legend(plt.gca().lines, legend, ncol=legend_ncol, bbox_to_anchor=(.0, 0.0, 1., 0.), loc='lower left', mode="expand", borderaxespad=0.)
-        fig.subplots_adjust(bottom=0.175)
+        if legend_position=='bottom':
+            legend = fig.legend(fig.get_axes()[0].lines, legend, ncol=legend_ncol, bbox_to_anchor=(.0, 0.0, 1., 0.), loc='lower left', mode="expand", borderaxespad=0.)
+            fig.subplots_adjust(bottom=adjust_legend)
+        elif legend_position=='right':
+            legend = fig.legend(fig.get_axes()[0].lines, legend, ncol=legend_ncol, bbox_to_anchor=(1,1), loc='upper left')
+            fig.subplots_adjust(right=adjust_legend)
         
         frame = legend.get_frame()        
         frame.set_facecolor('1.0')
@@ -130,16 +134,15 @@ def endGraphing(fig, legend=None, filename=None, move_title=0.825, legend_ncol=3
     if filename is not None:
         fig.savefig(filename+'.pdf')    
 
-def plotBox(title, data, labels, means=None, xlabel=None, ylabel='successrate (%)', doubleColors=False, skipped=None, rotateLabels=90):
+def plotBox(ax, data, labels, means=None, title=None, xlabel=None, ylabel='successrate', doubleColors=False, skipped=None, rotateLabels=90):
     if skipped is None:
         skipped = [0]*len(labels)
     
-    fig = plb.figure()
-    ax = fig.add_subplot(111)
-    ax.set_title(title, y=1.05)
+    if title is not None:
+    	ax.set_title(title, y=1.025)
 
-    if ylabel: plb.ylabel(ylabel, size=10)
-    if xlabel: plb.xlabel(xlabel, size=10)
+    if ylabel: ax.set_ylabel(ylabel, size=10)
+    if xlabel: ax.set_xlabel(xlabel, size=10)
     
     bp = ax.boxplot(data, notch=0, sym='b+', vert=1, whis=1.5, positions=None, widths=0.6, showmeans=False)
     
@@ -180,31 +183,31 @@ def plotBox(title, data, labels, means=None, xlabel=None, ylabel='successrate (%
     commonStyles(ax)
     ax.set_xticklabels(labels, rotation=rotateLabels)
             
-    if ylabel[:11]=='successrate':
-        plt.ylim(ymax=1.0)
+    # if ylabel[:11]=='successrate':
+        # plt.ylim(ymax=1.0)
 
-    fig.set_size_inches(min(10, 0.66*len(labels)), 4, forward=True)
+    # fig.set_size_inches(min(10, 0.66*len(labels)), 4, forward=True)
     
 
-def plotLines(title, data, labels, x_ticks, xlabel=None, ylabel='successrate (%)', doubleColors=False):
-    fig = plb.figure()
-    ax = fig.add_subplot(111)
+def plotLines(ax, data, x_ticks, labels=None, title=None, xlabel=None, ylabel='successrate', doubleColors=False, rotateLabels=0):
     ax.set_xticks(np.arange(len(x_ticks)))
-    ax.set_xticklabels(x_ticks, rotation=0)
-    ax.set_title(title, y=1.05)
+    ax.set_xticklabels(x_ticks, rotation=rotateLabels)
     
-    if ylabel: plb.ylabel(ylabel, size=10)
-    if xlabel: plb.xlabel(xlabel, size=10)
+    if title: ax.set_title(title, y=1.025)
+    
+    if ylabel: ax.set_ylabel(ylabel, size=10)
+    if xlabel: ax.set_xlabel(xlabel, size=10)
 
     colors = generateColors(alpha=255, doubleColors=doubleColors)
 
     for i,X in enumerate(data):
-        plt.plot(np.arange(len(X)), X, linewidth=2, color=colors[i])
+        ax.plot(np.arange(len(X)), X, linewidth=2, color=colors[i])
 
-    legend = plb.legend(labels, loc='center left', bbox_to_anchor=(1, 0.5));
-    frame = legend.get_frame()
-    frame.set_facecolor('1.0')
-    frame.set_edgecolor('1.0')
+    if labels is not None:
+	    legend = plb.legend(labels, loc='center left', bbox_to_anchor=(1, 0.5));
+	    frame = legend.get_frame()
+	    frame.set_facecolor('1.0')
+	    frame.set_edgecolor('1.0')
     
     # Shrink current axis by 20%
     box = ax.get_position()
@@ -212,11 +215,11 @@ def plotLines(title, data, labels, x_ticks, xlabel=None, ylabel='successrate (%)
 
     commonStyles(ax)
     
-    if ylabel[:11]=='successrate':
-        plt.ylim(ymax=1.0)
+    # if ylabel[:11]=='successrate':
+        # plt.ylim(ymax=1.0)
 
 
-def plotFitness(ax, fitnesses, best_results, worst_results, mean_results, baseline, min_gen=0, max_gen=None, title=None, xlabel=None, ylabel='successrate (%)', **kwargs):
+def plotFitness(ax, fitnesses, best_results, worst_results, mean_results, baseline, min_gen=0, max_gen=None, title=None, xlabel=None, ylabel='successrate', **kwargs):
     bmap = brewer2mpl.get_map('Set2', 'qualitative', 7)
     colors = bmap.mpl_colors
      
