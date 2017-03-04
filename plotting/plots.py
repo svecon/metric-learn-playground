@@ -219,7 +219,7 @@ def plotLines(ax, data, x_ticks, labels=None, title=None, xlabel=None, ylabel='s
         # plt.ylim(ymax=1.0)
 
 
-def plotFitness(ax, fitnesses, best_results, worst_results, mean_results, baseline, min_gen=0, max_gen=None, title=None, xlabel=None, ylabel='successrate', **kwargs):
+def plotFitness(ax, fitnesses, best_results, worst_results, mean_results, baseline, min_gen=0, max_gen=None, title=None, xlabel=None, ylabel='successrate', sigma=2.0, **kwargs):
     bmap = brewer2mpl.get_map('Set2', 'qualitative', 7)
     colors = bmap.mpl_colors
      
@@ -236,27 +236,27 @@ def plotFitness(ax, fitnesses, best_results, worst_results, mean_results, baseli
     mins = np.min(fitnesses, axis=1)
 
     if title:
-        ax.set_title(title, y=1.05)
+        ax.set_title(title, y=1.025)
     
     if ylabel: ax.set_ylabel(ylabel, size=10)
     if xlabel: ax.set_xlabel(xlabel, size=10)
 
-    ax.plot(x, gaussian_filter1d(maxs, sigma=2.0, axis=0), linewidth=1, color=colors[1])
+    ax.plot(x, gaussian_filter1d(maxs, sigma=sigma, axis=0), linewidth=1, color=colors[1])
     ax.fill_between(x, perc_25, perc_75, alpha=0.25, linewidth=0, color=colors[0]) 
-    ax.plot(x, gaussian_filter1d(med, sigma=2.0, axis=0), linewidth=1, color=colors[0])
+    ax.plot(x, gaussian_filter1d(med, sigma=sigma, axis=0), linewidth=1, color=colors[0])
 
-    ax.plot(x, gaussian_filter1d(best_results, sigma=2.0, axis=0), linewidth=2, color=colors[2])
-    ax.plot(x, gaussian_filter1d(worst_results, sigma=2.0, axis=0), linewidth=2, color=colors[3])
-    # ax.plot(x, gaussian_filter1d(mean_results, sigma=2.0, axis=0), linewidth=2, color=colors[4])
+    ax.plot(x, gaussian_filter1d(best_results, sigma=sigma, axis=0), linewidth=2, color=colors[2])
+    ax.plot(x, gaussian_filter1d(worst_results, sigma=sigma, axis=0), linewidth=2, color=colors[3])
+    # ax.plot(x, gaussian_filter1d(mean_results, sigma=sigma, axis=0), linewidth=2, color=colors[4])
 
-    ax.plot(x, gaussian_filter1d(mins, sigma=2.0, axis=0), linewidth=1, color=colors[1])
+    ax.plot(x, gaussian_filter1d(mins, sigma=sigma, axis=0), linewidth=1, color=colors[1])
     ax.plot(x, [baseline]*len(x), linewidth=1, color='black')
 
     commonStyles(ax)
     
-    if ylabel[:11]=='successrate':
+    # if ylabel[:11]=='successrate':
         # plt.ylim(ymax=1.0)
-        ax.set_ylim([0.0, 1.0])
+        # ax.set_ylim([0.0, 1.0])
 
 
 def plotScatter(ax, title, X_train, y_train, X_test, y_test, wrong, score, xlabel=None, ylabel=None):
