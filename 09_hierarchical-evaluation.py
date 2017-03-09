@@ -358,7 +358,7 @@ def pipelineStandCmaesKnn(X,y,datasetName):
             ('imputer', defaultImputer),
             ('standardizer', defaultStandardizer),
         ]),
-        Pipeline([ ('cmaes', MetricEvolution(strategy='knn', fitnesses='knn')) ]),
+        Pipeline([ ('cmaes', MetricEvolution(strategy='cmaes', fitnesses='knn')) ]),
         Pipeline([ ('knn', KNeighborsClassifier()), ]),
     ]
     params = [ {}, paramsCmaes, defaultKnnParams, ]
