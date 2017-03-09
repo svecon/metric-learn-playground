@@ -107,6 +107,8 @@ def startGraphing(title=None, cols=1, N=1, size=None, sharey=False):
     return fig, axes
 
 def endGraphing(fig, legend=None, filename=None, move_title=0.825, legend_ncol=3, adjust_legend=0.175, legend_position='bottom'):
+    plt.tight_layout(pad=0.0, w_pad=1.0, h_pad=3.0)
+
     if move_title:
         fig.subplots_adjust(top=move_title)
 
@@ -115,8 +117,6 @@ def endGraphing(fig, legend=None, filename=None, move_title=0.825, legend_ncol=3
     # ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
 
     # fig.subplots_adjust(right=0.80)
-
-    plt.tight_layout(pad=0.0, w_pad=1.0, h_pad=3.0)
 
     if legend is not None:
         # Right of the plot: loc='center left', bbox_to_anchor=(1, 0.5));
