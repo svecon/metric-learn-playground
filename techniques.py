@@ -50,14 +50,14 @@ sortedTechniques = [
 ]
 
 sortedDatasets = [
-    ('balance-scale', 'balance-scale'),
-    ('breast-cancer-wisconsin', 'breast-cancer'),
-    ('digits6', 'digits6'),
-    ('digits10', 'digits10'),
-    ('gaussians', 'gaussians'),
-    ('iris', 'iris'),
-    ('mice-protein', 'mice-protein'),
-    ('pima-indians-diabetes', 'pima-indians'),
-    ('sonar', 'sonar'),
-    ('wine', 'wine'),
+    'balance-scale',
+    'breast-cancer',
+    'digits6',
+    'digits10',
+    'gaussians',
+    'iris',
+    'mice-protein',
+    'pima-indians',
+    'sonar',
+    'wine',
 ]

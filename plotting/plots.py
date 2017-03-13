@@ -255,7 +255,7 @@ def plotFitness(ax, fitnesses, best_results, worst_results, mean_results, baseli
     commonStyles(ax)
     
     # if ylabel[:11]=='successrate':
-        # plt.ylim(ymax=1.0)
+    ax.set_ylim(ymax=1.0)
         # ax.set_ylim([0.0, 1.0])
 
 

@@ -18,7 +18,7 @@ import sys
 import math
 
 from hierarchical_grid_search_cv.HierarchicalGridSearchCV import HierarchicalGridSearchCV
-from hierarchical_grid_search_cv import EmptyTransformer
+from hierarchical_grid_search_cv.EmptyTransformer import EmptyTransformer
 
 from sklearn.model_selection import StratifiedKFold
 from sklearn.neighbors import KNeighborsClassifier
@@ -38,7 +38,7 @@ if not os.path.exists(resultsDirectory):
 if not os.path.exists(dumpsDirectory):
     os.makedirs(dumpsDirectory)
 
-default_n_jobs = 4
+default_n_jobs = 8
 default_random_state = 789
 default_n_folds = 10
 default_shuffle = True
@@ -93,6 +93,8 @@ def evaluateClassifier(X, y, pipeline, parameters, name=None, datasetName=None):
     df = pd.DataFrame(stats)
     df['technique'] = pd.Series([name]*df.shape[0], index=df.index)
     df['dataset'] = pd.Series([datasetName]*df.shape[0], index=df.index)
+
+    print(np.max(df['mean']))
     
     return df
 
@@ -123,14 +125,14 @@ defaultImputer = Imputer(missing_values='NaN', strategy='mean', axis=0, verbose=
 defaultStandardizer = StandardScaler(copy=False, with_mean=True, with_std=True)
 
 paramsCmaes = {
-    'cmaes__transformer': ('diagonal',), #('full', 'diagonal'),
+    'cmaes__transformer': ('full', 'diagonal'),
     'cmaes__s__n_gen': (50, 100, 250),
     'cmaes__f__n_neighbors': (1, 4, 8),#, 16),
     # 'cmaes__c__weights': ('uniform', 'distance'),
 }
 
 paramsCmaesFme = {
-    'cmaesfme__transformer': ('diagonal',), #('full', 'diagonal'),
+    'cmaesfme__transformer': ('full', 'diagonal'),
     'cmaesfme__s__n_gen': (50, 100, 250),
 }
 
@@ -307,7 +309,7 @@ def pipelineNcaKnn(X,y,datasetName):
 def pipelineLfdaKnn(X,y,datasetName):
     pipeline = [
         Pipeline([ ('imputer', defaultImputer), ]),
-        Pipeline([ ('lfda', LFDA(dim=None, k=7, metric='weighted')), ]),
+        Pipeline([ ('lfda', LFDA(num_dims=None, k=7, metric='weighted')), ]),
         Pipeline([ ('knn', KNeighborsClassifier()), ]),
     ]
     params = [ {}, {**paramsLfda, 'lfda__k': tuple(range(1, X.shape[1]))}, defaultKnnParams, ]
@@ -483,7 +485,7 @@ def pipelineStandLfdaKnn(X,y,datasetName):
             ('imputer', defaultImputer),
             ('standardizer', defaultStandardizer),
         ]),
-        Pipeline([ ('lfda', LFDA(dim=None, k=7, metric='weighted')), ]),
+        Pipeline([ ('lfda', LFDA(num_dims=None, k=7, metric='weighted')), ]),
         Pipeline([ ('knn', KNeighborsClassifier()), ]),
     ]
     params = [ {}, {**paramsLfda, 'lfda__k': tuple(range(1, X.shape[1]))}, defaultKnnParams, ]
@@ -507,19 +509,19 @@ def pipelineStandRcaKnn(X,y,datasetName):
 
 import glob, os
 
-# datasets = []
-# for file in glob.glob("{}/*.csv".format(datasetsDirectory)):
-#     datasets.append(file)
-# datasets.sort()
+datasets = []
+for file in glob.glob("{}/*.csv".format(datasetsDirectory)):
+    datasets.append(file)
+datasets.sort()
 
 # datasets.remove('datasets/soybean-large.csv')
 
 datasets = [
-'datasets/gaussians.csv',
 'datasets/balance-scale.csv',
-'datasets/breast-cancer-wisconsin.csv',
+'datasets/breast-cancer.csv',
+'datasets/gaussians.csv',
 'datasets/iris.csv',
-'datasets/pima-indians-diabetes.csv',
+'datasets/pima-indians.csv',
 'datasets/wine.csv',
 
 # 'datasets/ionosphere.csv',
@@ -561,35 +563,41 @@ for filename in datasets:
 #     print(len(all_inds)-1)
 #     print(np.random.randint(0, high=len(all_inds)-1))
 
-#     evaluatePipeline( X,y,datasetName,pipelineKnn )
-#     evaluatePipeline( X,y,datasetName,pipelineCovKnn )
+    evaluatePipeline( X,y,datasetName,pipelineKnn )
+    evaluatePipeline( X,y,datasetName,pipelineCovKnn )
     evaluatePipeline( X,y,datasetName,pipelineCmaesKnn )
     evaluatePipeline( X,y,datasetName,pipelineCmaesFmeKnn )
     evaluatePipeline( X,y,datasetName,pipelineJdeKnn )
-    # evaluatePipeline( X,y,datasetName,pipelineJdePurKnn )
     evaluatePipeline( X,y,datasetName,pipelineJdeKnnKnn )
-# #     evaluatePipeline( X,y,datasetName,pipelineLmnnKnn )
+    evaluatePipeline( X,y,datasetName,pipelineLmnnKnn )
+    # evaluatePipeline( X,y,datasetName,pipelineNcaKnn )
+    evaluatePipeline( X,y,datasetName,pipelineLfdaKnn )
+#     evaluatePipeline( X,y,datasetName,pipelineJdePurKnn )
 #     evaluatePipeline( X,y,datasetName,pipelineItmlKnn )
 #     evaluatePipeline( X,y,datasetName,pipelineSdmlKnn )
 #     evaluatePipeline( X,y,datasetName,pipelineLsmlKnn )
-# #     evaluatePipeline( X,y,datasetName,pipelineNcaKnn )
-#     evaluatePipeline( X,y,datasetName,pipelineLfdaKnn )
 #     evaluatePipeline( X,y,datasetName,pipelineRcaKnn ) 
 
-#     evaluatePipeline( X,y,datasetName,pipelineStandKnn )
-#     evaluatePipeline( X,y,datasetName,pipelineStandCovKnn )
+    evaluatePipeline( X,y,datasetName,pipelineStandKnn )
+    evaluatePipeline( X,y,datasetName,pipelineStandCovKnn )
     evaluatePipeline( X,y,datasetName,pipelineStandCmaesKnn )
     evaluatePipeline( X,y,datasetName,pipelineStandCmaesFmeKnn )
     evaluatePipeline( X,y,datasetName,pipelineStandJdeKnn )
-    # evaluatePipeline( X,y,datasetName,pipelineStandJdePurKnn )
     evaluatePipeline( X,y,datasetName,pipelineStandJdeKnnKnn )
-# #     evaluatePipeline( X,y,datasetName,pipelineStandLmnnKnn )
+    evaluatePipeline( X,y,datasetName,pipelineStandLmnnKnn )
+    # evaluatePipeline( X,y,datasetName,pipelineStandNcaKnn )
+    evaluatePipeline( X,y,datasetName,pipelineStandLfdaKnn )
+
+#     evaluatePipeline( X,y,datasetName,pipelineStandJdePurKnn )
 #     evaluatePipeline( X,y,datasetName,pipelineStandItmlKnn )
 #     evaluatePipeline( X,y,datasetName,pipelineStandSdmlKnn )
 #     evaluatePipeline( X,y,datasetName,pipelineStandLsmlKnn )
-# #     evaluatePipeline( X,y,datasetName,pipelineStandNcaKnn )
-#     evaluatePipeline( X,y,datasetName,pipelineStandLfdaKnn )
 #     evaluatePipeline( X,y,datasetName,pipelineStandRcaKnn ) 
+
+
+# In[ ]:
+
+
 
 
 # In[ ]:
@@ -599,4 +607,45 @@ for filename in datasets:
 
 # print(h.steps[-2][-1][0].steps[0][1].M)
 
+
+
+# In[ ]:
+
+# ## RENAMING files to shorter
+# results = []
+# for file in glob.glob("{}/*.csv".format(resultsDirectory)):
+#     results.append(file)
+# results.sort()
+
+# for x in results:
+#     y = x.replace('breast-cancer-wisconsin', 'breast-cancer')
+#     y = y.replace('pima-indians-diabetes', 'pima-indians')
+    
+#     os.rename(x, y)
+
+
+# In[ ]:
+
+# def inplace_change(filename):
+#     # Safely read the input filename using 'with'
+#     with open(filename) as f:
+#         s = f.read()
+#         if ('breast-cancer-wisconsin' not in s) and ('pima-indians-diabetes' not in s):
+#             print('not found in {}'.format(filename))
+#             return
+
+#     # Safely write the changed content, if found in the file
+#     with open(filename, 'w') as f:
+#         s = s.replace('breast-cancer-wisconsin', 'breast-cancer')
+#         s = s.replace('pima-indians-diabetes', 'pima-indians')
+#         f.write(s)
+        
+# # ## REPLACING files to shorter in index
+# results = []
+# for file in glob.glob("{}/*.csv".format(resultsDirectory)):
+#     results.append(file)
+# results.sort()
+
+# for x in results:
+#     inplace_change(x)
 
