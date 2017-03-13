@@ -18,7 +18,7 @@ import sys
 import math
 
 from hierarchical_grid_search_cv.HierarchicalGridSearchCV import HierarchicalGridSearchCV
-from hierarchical_grid_search_cv import EmptyTransformer
+from hierarchical_grid_search_cv.EmptyTransformer import EmptyTransformer
 
 from sklearn.model_selection import StratifiedKFold
 from sklearn.neighbors import KNeighborsClassifier
