@@ -242,15 +242,16 @@ def plotFitness(ax, fitnesses, best_results, worst_results, mean_results, baseli
     if xlabel: ax.set_xlabel(xlabel, size=10)
 
     ax.plot(x, gaussian_filter1d(maxs, sigma=sigma, axis=0), linewidth=1, color=colors[1])
-    ax.fill_between(x, perc_25, perc_75, alpha=0.25, linewidth=0, color=colors[0]) 
+    # ax.fill_between(x, perc_25, perc_75, alpha=0.25, linewidth=0, color=colors[0]) 
+    ax.fill_between(x, gaussian_filter1d(perc_25, sigma=sigma, axis=0), gaussian_filter1d(perc_75, sigma=sigma, axis=0), alpha=0.25, linewidth=0, color=colors[0]) 
     ax.plot(x, gaussian_filter1d(med, sigma=sigma, axis=0), linewidth=1, color=colors[0])
 
     ax.plot(x, gaussian_filter1d(best_results, sigma=sigma, axis=0), linewidth=2, color=colors[2])
     ax.plot(x, gaussian_filter1d(worst_results, sigma=sigma, axis=0), linewidth=2, color=colors[3])
     # ax.plot(x, gaussian_filter1d(mean_results, sigma=sigma, axis=0), linewidth=2, color=colors[4])
 
-    ax.plot(x, gaussian_filter1d(mins, sigma=sigma, axis=0), linewidth=1, color=colors[1])
     ax.plot(x, [baseline]*len(x), linewidth=1, color='black')
+    ax.plot(x, gaussian_filter1d(mins, sigma=sigma, axis=0), linewidth=1, color=colors[1])
 
     commonStyles(ax)
     
