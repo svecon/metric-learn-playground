@@ -61,7 +61,7 @@ def perc(data):
 params = {
 #     predefined https://github.com/jbmouret/matplotlib_for_papers
     'axes.labelsize': 8,
-    'font.size': 8,
+    'font.size': 10,
     'legend.fontsize': 10,
     'xtick.labelsize': 10,
     'ytick.labelsize': 10,
@@ -289,3 +289,15 @@ def plotScatter(ax, title, X_train, y_train, X_test, y_test, wrong, score, xlabe
     ax.grid(axis='x', color="0.9", linestyle='-', linewidth=0)
     ax.grid(axis='y', color="0.9", linestyle='-', linewidth=0)
     ax.tick_params(axis='x', length=0)
+
+def plotEmpty(ax, title=None, text=None):
+    if title is not None:
+        ax.set_title(title, y=1.025)
+
+    if text is not None:
+        ax.text(0.5, 0.5, text, horizontalalignment='center', verticalalignment='center', transform=ax.transAxes)
+
+    ax.set_xticklabels([])
+    ax.set_yticklabels([])
+
+    commonStyles(ax)
