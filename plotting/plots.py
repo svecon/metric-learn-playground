@@ -34,6 +34,9 @@ def stars(p):
         return "-"
 
 def generateColors(alpha=255, doubleColors=False, skipped=None):
+    colors = [ # http://colorbrewer2.org/#type=qualitative&scheme=Paired&n=12
+			(166,206,227,alpha), (31,120,180,alpha), (178,223,138,alpha), (51,160,44,alpha), (251,154,153,alpha), (227,26,28,alpha),
+			(253,191,111,alpha), (255,127,0,alpha), (202,178,214,alpha), (106,61,154,alpha), (255,255,153,alpha), (177,89,40,alpha)]
 #     colors = brewer2mpl.get_map('Set3', 'qualitative', min(12, len(labels))).mpl_colors
     colors = [(31, 119, 180, alpha), (255, 127, 14, alpha), (70, 171, 70, alpha), (214, 39, 40, alpha), (148, 103, 189, alpha),
           (140, 86, 75, alpha), (227, 119, 194, alpha), (127, 127, 127, alpha), (188, 189, 34, alpha), (23, 190, 207, alpha)]
@@ -189,7 +192,7 @@ def plotBox(ax, data, labels, means=None, title=None, xlabel=None, ylabel='succe
     # fig.set_size_inches(min(10, 0.66*len(labels)), 4, forward=True)
     
 
-def plotLines(ax, data, x_ticks, labels=None, title=None, xlabel=None, ylabel='successrate', doubleColors=False, rotateLabels=0):
+def plotLines(ax, data, x_ticks, labels=None, title=None, xlabel=None, ylabel='successrate', doubleColors=False, rotateLabels=0, markers=None):
     ax.set_xticks(np.arange(len(x_ticks)))
     ax.set_xticklabels(x_ticks, rotation=rotateLabels)
     
@@ -201,13 +204,14 @@ def plotLines(ax, data, x_ticks, labels=None, title=None, xlabel=None, ylabel='s
     colors = generateColors(alpha=255, doubleColors=doubleColors)
 
     for i,X in enumerate(data):
-        ax.plot(np.arange(len(X)), X, linewidth=2, color=colors[i])
+        marker = markers[i] if markers is not None else '-'
+        ax.plot(np.arange(len(X)), X, marker, linewidth=2, color=colors[i])
 
     if labels is not None:
-	    legend = plb.legend(labels, loc='center left', bbox_to_anchor=(1, 0.5));
-	    frame = legend.get_frame()
-	    frame.set_facecolor('1.0')
-	    frame.set_edgecolor('1.0')
+        legend = plb.legend(labels, loc='center left', bbox_to_anchor=(1, 0.5));
+        frame = legend.get_frame()
+        frame.set_facecolor('1.0')
+        frame.set_edgecolor('1.0')
     
     # Shrink current axis by 20%
     box = ax.get_position()
