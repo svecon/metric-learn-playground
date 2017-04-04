@@ -260,13 +260,13 @@ def plotFitness(ax, fitnesses, best_results, worst_results, mean_results, baseli
         # ax.set_ylim([0.0, 1.0])
 
 
-def plotScatter(ax, title, X_train, y_train, X_test, y_test, wrong, score, xlabel=None, ylabel=None):
+def plotScatter(ax, title, X_train, y_train, X_test, y_test, wrong, score, xlabel=None, ylabel=None,scoreIsAproximation=False):
     colors = generateColors(alpha=255, doubleColors=False, skipped=None)
 
     X_train = X_train.T
     X_test = X_test.T
 
-    ax.set_title('{} ({:.2f}%)'.format(title, score*100), y=1.05)
+    ax.set_title('{} ({}{:.2f}%)'.format(title, '~' if scoreIsAproximation else '', score*100), y=1.05)
     
     def fsizes(a):
         return [x*50+75 for x in a]
