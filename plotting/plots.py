@@ -281,6 +281,7 @@ def plotScatter(ax, title, X_train, y_train, X_test, y_test, wrong, score, xlabe
     def fedge(a):
         return [(1,0,0,1) if x else (0,0,0,0) for x in a]
     
+    ax.margins(x=0, y=0)
     ax.scatter(X_train[0], X_train[1], s=fsizes(np.zeros(len(y_train))), color=fcolors(y_train), alpha=0.15)
     ax.scatter(X_test[0], X_test[1], s=fsizes(wrong), color=fcolors(y_test), alpha=0.55, edgecolors=fedge(wrong))
 
