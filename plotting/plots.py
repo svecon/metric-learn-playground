@@ -294,7 +294,7 @@ def plotScatter(ax, title, X_train, y_train, X_test, y_test, wrong, score, xlabe
     ax.grid(axis='y', color="0.9", linestyle='-', linewidth=0)
     ax.tick_params(axis='x', length=0)
 
-def plotEmpty(ax, title=None, text=None):
+def plotEmpty(ax, title=None, text=None, hideAxis=False):
     if title is not None:
         ax.set_title(title, y=1.025)
 
@@ -305,3 +305,9 @@ def plotEmpty(ax, title=None, text=None):
     ax.set_yticklabels([])
 
     commonStyles(ax)
+
+    if hideAxis:
+        ax.spines['bottom'].set_visible(False)
+        ax.grid(axis='x', color="0.9", linestyle='-', linewidth=0)
+        ax.grid(axis='y', color="0.9", linestyle='-', linewidth=0)
+        ax.tick_params(axis='x', length=0)
