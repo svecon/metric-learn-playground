@@ -264,7 +264,7 @@ def plotFitness(ax, fitnesses, best_results, worst_results, mean_results, baseli
         # ax.set_ylim([0.0, 1.0])
 
 
-def plotScatter(ax, title, X_train, y_train, X_test, y_test, wrong, score, xlabel=None, ylabel=None,scoreIsAproximation=False):
+def plotScatter(ax, title, X_train, y_train, X_test, y_test, wrong, score, scores=None, xlabel=None, ylabel=None,scoreIsAproximation=False):
     colors = generateColors(alpha=255, doubleColors=False, skipped=None)
 
     X_train = X_train.T
