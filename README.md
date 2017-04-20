@@ -1,1 +1,5 @@
-# metric-learn-playground
+These notebooks contain experiments that are described in my paper submitted to ECML 2017 conference.
+
+# Dimensionality Reduction and Visualization Using Evolutionary Algorithms and Neural Networks
+
+In this paper, we propose a novel method for a supervised dimensionality reduction, which learns weights of a neural network using an evolutionary algorithm, CMA-ES, in combination with the k-NN classifier. If no activation functions are used in the neural network, the algorithm essentially performs a linear transformation. This linear neural network can also be used inside of the Mahalanobis distance and therefore our method can be considered to be a metric learning algorithm. By adding activations, the algorithm can learn non-linear transformations as well. We consider reductions to low dimensional spaces, which are useful for data visualization, and demonstrate that the resulting projections provide better performance than other dimensionality reduction techniques and also that the visualizations provide better distinctions between the classes in the data thanks to the locality of the k-NN classifier. 
