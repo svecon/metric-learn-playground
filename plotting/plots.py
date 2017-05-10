@@ -137,7 +137,7 @@ def endGraphing(fig, legend=None, filename=None, move_title=0.825, legend_ncol=3
     if filename is not None:
         fig.savefig(filename+'.pdf')    
 
-def plotBox(ax, data, labels, means=None, title=None, xlabel=None, ylabel='successrate', doubleColors=False, skipped=None, rotateLabels=90):
+def plotBox(ax, data, labels, means=None, title=None, xlabel=None, ylabel='success rate', doubleColors=False, skipped=None, rotateLabels=90):
     if skipped is None:
         skipped = [0]*len(labels)
     
@@ -186,13 +186,13 @@ def plotBox(ax, data, labels, means=None, title=None, xlabel=None, ylabel='succe
     commonStyles(ax)
     ax.set_xticklabels(labels, rotation=rotateLabels)
             
-    # if ylabel[:11]=='successrate':
+    # if ylabel[:11]=='success rate':
         # plt.ylim(ymax=1.0)
 
     # fig.set_size_inches(min(10, 0.66*len(labels)), 4, forward=True)
     
 
-def plotLines(ax, data, x_ticks, labels=None, title=None, xlabel=None, ylabel='successrate', doubleColors=False, rotateLabels=0, markers=None):
+def plotLines(ax, data, x_ticks, labels=None, title=None, xlabel=None, ylabel='success rate', doubleColors=False, rotateLabels=0, markers=None):
     ax.set_xticks(np.arange(len(x_ticks)))
     ax.set_xticklabels(x_ticks, rotation=rotateLabels)
     
@@ -219,11 +219,11 @@ def plotLines(ax, data, x_ticks, labels=None, title=None, xlabel=None, ylabel='s
 
     commonStyles(ax)
     
-    # if ylabel[:11]=='successrate':
+    # if ylabel[:11]=='success rate':
         # plt.ylim(ymax=1.0)
 
 
-def plotFitness(ax, fitnesses, best_results, worst_results, mean_results, baseline, min_gen=0, max_gen=None, title=None, xlabel=None, ylabel='successrate', sigma=2.0, **kwargs):
+def plotFitness(ax, fitnesses, best_results, worst_results, mean_results, baseline, min_gen=0, max_gen=None, title=None, xlabel=None, ylabel='success rate', sigma=2.0, **kwargs):
     bmap = brewer2mpl.get_map('Set2', 'qualitative', 7)
     colors = bmap.mpl_colors
      
@@ -259,8 +259,8 @@ def plotFitness(ax, fitnesses, best_results, worst_results, mean_results, baseli
 
     commonStyles(ax)
     
-    # if ylabel[:11]=='successrate':
-    ax.set_ylim(ymax=1.0)
+    # if ylabel[:11]=='success rate':
+    # ax.set_ylim(ymax=1.0)
         # ax.set_ylim([0.0, 1.0])
 
 
