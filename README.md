@@ -9,8 +9,8 @@ The experiments are split into several jupyter notebooks:
 - [02]: improving **success rate of kNN classification experiment**
 - [03]: extracting results and plotting graphs from the [02] experiment
 - [04]: **dimensionality reduction experiment**
-- [05]: generalization of the evolution experiment [not in the paper]
-- [06]: measuring learning times on datasets from [01] experiment [not in the paper]
-- [07]: measuring run times on continuously increasing dimensions experiment [not in the paper]
+- [05]: generalization of the evolution experiment
+- [06]: **measuring learning times** on datasets from [01] experiment
+- [07]: measuring run times on continuously increasing dimensions experiment
 
 The raw results from the experiments are saved in *results* folder. The resulting graphs are in the *graphs* folder.
